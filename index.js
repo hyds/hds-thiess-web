@@ -7,6 +7,7 @@ url = require('url'),
 rootFolder = '/views/';
 
 var sys = require("sys");  
+var port = process.env.PORT || 3000;
 
 
 
@@ -18,7 +19,7 @@ http.createServer(function(req,res){
 
 	res.writeHead(200, {'Content-Type': 'text/html'});
 
-    fs.createReadStream('index.html').pipe(res);
+    //fs.createReadStream('index.html').pipe(res);
 
     console.log(res);
 
@@ -34,6 +35,8 @@ sys.puts("Server Running on 80");
 
 /*
 
+
+
 http.createServer(function(req,res){  
 
     sys.puts("I got kicked");  
@@ -48,9 +51,8 @@ http.createServer(function(req,res){
 
 sys.puts("Server Running on 80"); 
 
+
 */
-
-
 
 
 
@@ -136,7 +138,6 @@ http.createServer(function (request, response) {
 
 	
 
-}).listen(80);
-
+}).listen(port);
 
 
