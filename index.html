@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<!-- <meta http-equiv="X-UA-Compatible" content="IE=7" />
+
+-->
+
+<meta charset="utf-8" />
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+<!--[if lt IE 9]>
+
+  <script src="js/html5shiv.js"></script>
+
+  <script src="js/respond.min.js"></script>
+
+<![endif]-->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Arrow Energy Hydstra Webservice</title>
+
+<link rel="stylesheet" type="text/css" href="styles/boostrap-min.css">
+
+<link rel="stylesheet" type="text/css" href="styles/bootstrap-responsive-min.css">
+
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.3.1/leaflet.css" />
+
+<script src="http://cdn.leafletjs.com/leaflet-0.3.1/leaflet.js"></script>
+
+<script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
+
+<script src="http://matchingnotes.com/javascripts/leaflet-google.js"></script>
+
+
+
+<script type="text/javascript" src="scripts/jquery.js"></script>
+
+
+
+<style>
+
+ #pdf, #images { height: 550px; }
+
+ 
+
+</style>
+
+
+
+
+
+</head>
+
+
+
+
+
+
+
+
+
+
+
+<body>
+
+    <br><div class="row visible-print"> 
+
+            <h3>DNRM GWDB - Bore card</h3>
+
+          </div>
+
+    <div style="width:100%; height:700px" id="map"></div>    
+
+	<hr>
+
+    <div class="container">
+
+      <div class="row"> 
+
+        <div class="col-md-12">
+
+          <div class="row">
+
+            <div class="form-group">
+
+              <form class="form-horizontal hidden-print" role="form">
+
+                <label class="control-label" for="RN">Search For Site:</label>
+
+                  <input type="text" class="form-control" id="RN" placeholder="E.g. 10">
+
+                <!--
+
+                <div class="col-lg-2">  
+
+                  <input type="text" class="form-control" id="plan" placeholder="plan">
+
+                </div>
+
+                -->
+
+                
+
+                  <button type="button" data-loading-text="Loading..." id="submitRN" class="btn btn-primary">
+
+                    Submit &raquo;
+
+                  </button>
+
+                
+
+            </form>          
+
+            </div>
+
+           
+
+  </div><!-- End Tab-Content -->
+
+  
+
+  
+
+  <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+
+  <script type="text/javascript" src="scripts/respond-min.js"></script>
+
+  <script type="text/javascript" src="scripts/mustache.js"></script>
+
+ 
+
+  <script type="text/javascript" src="scripts/button.js"></script>
+
+  <script type="text/javascript" src="scripts/tab.js"></script>
+
+  <script type="text/javascript" src="scripts/transition.js"></script>
+
+ 
+
+  <style>
+
+    .chart div{
+
+      font:10px;
+
+      background-color:steelblue;
+
+      text-align:right;
+
+      padding:3px;
+
+      margin:1px;
+
+      color:white;
+
+    
+
+    }
+
+  
+
+  
+
+  </style>
+
+ 
+
+ 
+
+  <script type="text/javascript" >
+
+     var map = new L.Map('map', {center: new L.LatLng(-37.813186, 144.9629796), zoom: 9});
+
+      var googleLayer = new L.Google('ROADMAP');
+
+      map.addLayer(googleLayer);
+
+	
+
+	//var arrowAPI = "http://10.0.3.25/cgi/arrowAPI.pl";
+
+    //var arrowwebservice = "http://10.0.3.25/cgi/webservice.server.pl?jsoncallback=table";
+
+    //var arrowwebservice = "http://172.31.16.79:8800?jsoncallback=table";
+
+    var arrowwebservice = "http://54.66.167.87:8800/?jsoncallback=table";
+
+	
+
+	
+
+    $( "button" ).click(function() {
+
+      var rn = $("#RN").val();
+
+      var plan = $("#plan").val();
+
+      var table = 'site';
+
+      //test&
+
+      ///http://10.0.3.25/cgi/webservice.server.pl
+
+      //var gest = 'http://10.0.3.25/cgi/webservice.server.pl?jsoncallback=test&{"params":{"site_list":"HYDSYS01","start_time":"19800801000000","varfrom":"100.00","interval":"day","varto":"100.00","datasource":"A","end_time":"19850802000000","data_type":"mean","multiplier":"1"},"function":"get_ts_traces","version":"1"}';
+
+      /*
+
+      var gest = '{"params":'+
+
+        '{"site_list":"'+rn+'",'+
+
+        '"start_time":"19800801000000",'+
+
+        '"varfrom":"100.00","interval":"day","varto":"100.00","datasource":"A","end_time":"19850802000000","data_type":"mean","multiplier":"1"},'+
+
+        '"function":"get_ts_traces","version":"1"}';
+
+      */
+
+      /*
+
+      var carousel_images = "<div class='item active'>"+
+
+                    "<img src='wini/images/aes0105/ARROW_AES0105_OTHPHOT_03.jpeg' >"+
+
+                    "<div class='carousel-caption'>"+
+
+                     "<p>ARROW_AES0105_OTHPHOT_02</p>"+
+
+                    "</div>"+
+
+                  "</div>"+
+
+                  "<div class='item'>"+
+
+                    "<img src='wini/images/aes0105/ARROW_AES0105_OTHPHOT_02.jpeg' >"+
+
+                    "<div class='carousel-caption'>"+
+
+                      "<p>ARROW_AES0105_OTHPHOT_02</p>"+
+
+                    "</div>"+
+
+                  "</div>"+
+
+                  "<div class='item'>"+
+
+                    "<img src='wini/images/aes0105/ARROW_AES0105_WLMEASPHOT_01.jpeg' >"+
+
+                    "<div class='carousel-caption'>"+
+
+                      "<p>ARROW_AES0105_OTHPHOT_02</p>"+
+
+                    "</div>"+
+
+                  "</div>";
+
+      
+
+      $('#carousel_images').html(carousel_images);
+
+      
+
+      var pdf = " <object data='wini/doc/aes1220/ARROW_AES1220_WQLABRSDC_01.pdf' type='application/pdf' width='100%' id='pdf'>"+
+
+                   "<p>Your browser doesn't have a PDF plugin. Download file from here ... <a href='wini/doc/aes1220/ARROW_AES1220_WQLABRSDC_01.pdf'>Click to download</a></p>"+
+
+                  "</object>";
+
+      $('#pdf').html(pdf);
+
+      */
+
+      var ts_call = '{'+ 
+
+      '"function": "get_ts_traces",'+ 
+
+        '"version": 1,'+
+
+        '"params": {'+
+
+          '"site_list": "'+rn+'",'+ 
+
+          '"datasource": "A",'+ 
+
+          '"varfrom": "119.00",'+ 
+
+          '"varto": "119.00",'+ 
+
+          '"start_time": "20100801000000",'+ 
+
+          '"end_time":"20130802000000",'+ 
+
+          '"data_type": "mean",'+ 
+
+          '"interval": "day",'+ 
+
+          '"multiplier": "1",'+
+
+        '}'+
+
+      '}';
+
+/*
+
+
+
+      
+
+      
+
+      
+
+      $.get( arrowwebservice, ts_call, function( data ) {
+
+          var dt = data.replace(/table\(/, "");
+
+          dt = dt.replace(/\);/, "");
+
+          var ts = JSON.parse(dt);
+
+          d3.select("#d3")
+
+              .append("h1")
+
+              .text("Hello D3! "); //+dt
+
+          
+
+          var dat = [4,5,3,6,7,3,6];
+
+          
+
+          var chart = d3.select("#d3").append("div")
+
+              .attr("class","chart");
+
+          
+
+          chart.selectAll("div")
+
+            .data(dat)
+
+            .enter().append("div")
+
+            .style("width",function(d){return d*10 +"px";})
+
+            .text(function(d) {return d;});
+
+          
+
+          var svg = d3.select("#d3")
+
+                      .append("svg")
+
+                      .attr('width',400)
+
+                      .attr('height',400)
+
+                      .attr('id','chart');
+
+          
+
+          var series = svg.selectAll('g.series')
+
+                      .data(d3.keys(dt))
+
+                      .enter()
+
+                      .append('g')
+
+                      .attr('class','series');
+
+
+
+                      
+
+          
+
+          
+
+          //$('#d3').html(dt);
+
+          
+
+      }); 
+
+      
+
+      
+
+      var plotlet_call = '{'+
+
+      '"function" : "get_widget",'+ 
+
+          '"version" : 1,'+ 
+
+          '"params" : {'+
+
+            '"widgets" : ['+
+
+              '{'+
+
+                '"widget_type"          : "plotlet",'+
+
+                '"widget_width"         : "800",'+
+
+                '"widget_height"        : "400",'+ 
+
+                '"id"                   : "1",'+
+
+                '"title"                : "'+rn+'",'+
+
+                '"title_height"         : "9",'+
+
+                '"starttime"            : "20110101000000",'+
+
+                '"endtime"            : "20130601000000",'+
+
+                '"interval"             : "hour",'+
+
+                '"interval_multiplier"  : "3",'+
+
+                '"show_lines"           : "yes",'+
+
+                '"show_points"          : "no",'+
+
+                '"filled"               : "no",'+
+
+                '"invert"               : "no",'+
+
+                '"background_color"     : "white",'+ 
+
+                '"show_bad_qual"        : "1",'+
+
+                '"trace_requests"       : ['+
+
+                  '{'+
+
+                  '  "site"       : "'+rn+'",'+
+
+                  '  "datasource" : "A",'+
+
+                  '  "varfrom"    : "119",'+
+
+                  '  "varto"      : "119.00",'+
+
+                  '  "trace_type" : "maxmin",'+
+
+                  '  "axis_align" : "left",'+
+
+                  '  "color"      : "blue",'+
+
+                  '  "bad_color"  : "white"'+
+
+                  '}]'+
+
+              '}'+
+
+            ']'+
+
+          '}'+
+
+        '}';
+
+   
+
+       $.get( arrowwebservice, plotlet_call, function( data ) {
+
+        var dt = data.replace(/table\(/, "");
+
+        dt = dt.replace(/\);/, "");
+
+        var imageData = JSON.parse(dt);
+
+        
+
+        //"_return" : {
+
+        //  "widgets":[{
+
+        //    "width" : "400px",
+
+        //    "height" : "400px",
+
+        //    "id" : "1",
+
+        //    "base64_widget" : "iVBORw0KGgoAAAANSUhEUgAAAZ
+
+        //
+
+        var imageTemplate = "{{#_return}}"+
+
+                              "{{#widgets}}"+
+
+                                " <img width='{{width}}' height='{{height}}' src='data:image/png;base64,{{base64_widget}}' alt='Unable to display chart'/>"+
+
+                              "{{/widgets}}"+ 
+
+                            "{{/_return}}";
+
+                              
+
+        var html_chart  = Mustache.to_html(imageTemplate,imageData);
+
+        //var html_chart = '<img src="data:image/png;base64,'+data'" alt="Unable to display chart"/>'; 
+
+        //$('#charts').html(data);
+
+        $('#charts').html(html_chart);
+
+        //$('#charts').html(image);
+
+       });
+
+      
+
+      
+
+      var history = '{'+
+
+        '"function" : "get_db_info",'+
+
+        '"version":"3",'+
+
+        '"params":'+
+
+          '{'+
+
+            '"filter_values"   : {"station": "'+rn+'", "keyword":"plotlet"},'+
+
+            '"table_name"      : "history",'+
+
+            '"return_type"     : "array",'+
+
+            '"decodes"         : "yes",'+
+
+            '"field_list"      : ["station","descript"],'+
+
+          '}'+
+
+        '}';
+
+        
+
+       $.get( arrowwebservice, history, function( data ) {
+
+          var dt = data.replace(/table\(/, "");
+
+          dt = dt.replace(/\);/, "");
+
+          var dat = JSON.parse(dt);
+
+          
+
+          var tpl = "{{#_return}}{{#rows}}"+
+
+          "<img src='{{descript}}' alt='Unable to display chart'/>"+
+
+          "{{/rows}}{{/_return}}";
+
+          var html  = Mustache.to_html(tpl,dat);//,partials);
+
+          
+
+          $('#histimg').html(dt);
+
+          //$('#histimg').html(html);
+
+        });
+
+      
+
+      */
+
+	  
+
+      var gest = '{'+
+
+        '"function" : "get_db_info",'+
+
+        '"version":"3",'+
+
+        '"params":'+
+
+          '{'+
+
+            '"filter_values"   : {"station": "'+rn+'"},'+
+
+            '"table_name"      : "site",'+
+
+            '"return_type"     : "array",'+
+
+            '"decodes"         : "yes",'+
+
+            '"field_list"      : ["station","stname","latitude","longitude","lldatum","stntype","category5","orgcode","comment"],'+
+
+          '}'+
+
+        '}';
+
+      
+
+       
+
+      
+
+      //var gest = '{"params":{"site_list":"HYDSYS01","start_time":"19800801000000","varfrom":"100.00","interval":"day","varto":"100.00","datasource":"A","end_time":"19850802000000","data_type":"mean","multiplier":"1"},"function":"get_ts_traces","version":"1"}';
+
+      
+
+      
+
+      //var template = require(./template.htm);
+
+      //$.get( arrowAPI, { site : rn, table_name : table} , function( data ) {
+
+      $.post( arrowwebservice, gest, function( data ) {
+
+        var dt = data.replace(/table\(/, "");
+
+        dt = dt.replace(/\);/, "");
+
+        //$('#testdiv').html(data);
+
+        //$('#testdiv').html(dt);
+
+        //so there is a problem with the text below!! webservcice seems to be fine
+
+        
+
+        var dat = JSON.parse(dt);
+
+        //var output = Mustache.render("<thead><tr><th>Timestamp</th><th>Value</th><th>Quality</th></tr></thead><tbody>{{#traces}} {{#trace}} <tr><td>{{t}}</td> <td>{{v}}</td><td>{{q}}</td></tr>{{/trace}} {{/traces}}<tbody>", dat);
+
+        //var output = Mustache.render("<caption class='text-left'><h3>{{get_db_info.table_name}} table</h3></caption>  <thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>{{#data}}<tr><td>Station: </td> <td>{{station}} </td> </tr>{{data}}<tbody>", dat);
+
+        //var tpl = "<caption class='text-left'><h3>{{get_db_info.table_name}} table</h3></caption>" +
+
+        var tpl ="<thead><tr><th class='text-right'>Field</th><th>Value</th></tr></thead>"
+
+        +
+
+        "<tbody>{{#_return}}{{#rows}}"+
+
+        "<tr><td class='text-right'><small><b>Hydstra BoreID:  </b></small> </td><td><small>{{station}}         </small></td></tr>"+
+
+        "<tr><td class='text-right'><small><b>Friendly Name:   </b></small> </td><td><small>{{stname}}          </small></td></tr>"+
+
+        "<tr><td class='text-right'><small><b>Latitude:        </b></small> </td><td><small>{{latitude_decode}} </small></td></tr>"+
+
+        "<tr><td class='text-right'><small><b>Longitude:       </b></small> </td><td><small>{{longitude_decode}}</small></td></tr>"+
+
+        "<tr><td class='text-right'><small><b>Datum:           </b></small> </td><td><small>{{lldatum}}         </small></td></tr>"+
+
+        "<tr><td class='text-right'><small><b>Organisation:            </b></small> </td><td><small>{{orgcode_decode}}  </small></td></tr>"+
+
+        "<tr><td class='text-right'><small><b>Source:          </b></small> </td><td><small>{{category5_decode}}</small></td></tr>"+
+
+        "<tr><td class='text-right'><small><b>Bore Type:       </b></small> </td><td><small>{{stntype_decode}}  </small></td></tr>"+
+
+        "<tr><td class='text-right'><small><b>Comments:        </b></small> </td><td><small>{{comment}}         </small></td></tr>"+
+
+        "{{/rows}}{{/_return}}<tbody>";
+
+
+
+        //"<tr><td class='text-right'>Lot: </td><td>{{lot_decode}}</td></tr>"+
+
+        //"<tr><td class='text-right'>Plan: </td><td>{{plan_decode}}</td></tr>"+
+
+        
+
+        var test ="<thead><tr><th class='text-right'>Field</th><th>Value</th></tr></thead>" +
+
+        "<tbody>{{#get_db_info}}{{#data}}"+
+
+        "<tr><td class='text-right'><b>BoreID:</b> </td><td>{{station}}</td></tr>"+
+
+        "<tr><td class='text-right'><b>Latitude:</b> </td><td>{{latitude_decode}}</td></tr>"+
+
+        "<tr><td class='text-right'><b>Longitude:</b> </td><td>{{longitude_decode}}</td></tr>"+
+
+        "<tr><td class='text-right'><b>Datum:</b> </td><td>{{lldatum}}</td></tr>"+
+
+        //"<tr><td class='text-right'>Lot: </td><td>{{lot_decode}}</td></tr>"+
+
+        //"<tr><td class='text-right'>Plan: </td><td>{{plan_decode}}</td></tr>"+
+
+        "<tr><td class='text-right'><b>Source:</b> </td><td>{{orgcode_decode}}</td></tr>"+
+
+        "<tr><td class='text-right'><b>Bore Type:</b> </td><td>{{stntype_decode}}</td></tr>"+
+
+        "<tr><td class='text-right'><b>Comments:</b> </td><td>{{comment}}</td></tr>"+
+
+        "{{/data}}{{/get_db_info}}<tbody>";
+
+
+
+        //"" 
+
+        //<tbody>{{#get_db_info}}{{#data}}<tr><td>Station: </td> <td>{{station}} </td> </tr>{{/data}}{{/get_db_info}}<tbody>", dat)
+
+        var html  = Mustache.to_html(tpl,dat);//,partials);
+
+        $('#tabletest').html(html);
+
+        
+
+        
+
+        var lat = dat._return.rows[0].latitude;
+
+        var lng = dat._return.rows[0].longitude;
+
+        var station = dat._return.rows[0].station;
+
+        
+
+        var latlng = new L.LatLng(lat,lng);
+
+        map.panTo(latlng);
+
+        
+
+        //var map = L.map('map').setView([lat,lng ], 7);
+
+        
+
+          // add a marker in the given location, attach some popup content to it and open the popup
+
+        L.marker([lat, lng]).addTo(map)
+
+           .bindPopup('<b>BoreID:</b> '+station + "      ")
+
+           .openPopup();
+
+    
+
+        //$('#testdiv').append('<br>dt ['+dt+']<br>');
+
+        //$('#testdiv').append('<br>dat ['+dat+']<br>');
+
+        //$('#testdiv').append('<br>lat ['+lat+']<br>');
+
+        //$('#testdiv').append('<br>End');
+
+                
+
+        //$('#printdiv').html(data);
+
+        
+
+      });
+
+      
+
+      
+
+      
+
+/*  
+
+  var dc = '{'+
+
+        '"function" : "table_doc_location",'+
+
+        '"version":"1",'+
+
+        '"params":'+
+
+          '{'+
+
+            '"table_name"      : "site",'+
+
+            '"key_fields"      : ["station"],'+
+
+            '"key_values"      : ["'+rn+'"]'+
+
+          '}'+
+
+        '}';
+
+      
+
+      var docpath;
+
+      $.get( arrowwebservice, dc, function( data ) {
+
+        var dt = data.replace(/table\(/, "");
+
+        dt = dt.replace(/\);/, "");
+
+        var doc = JSON.parse(dt);
+
+        
+
+        var template ="<b>location </b>{{_return.location}}<br>";
+
+        
+
+        
+
+        var htm  = Mustache.to_html(template,doc);//,partials);
+
+        
+
+          $('#testdiv').append(htm);  
+
+      });
+
+ */     
+
+      
+
+      
+
+
+
+      
+
+      
+
+    });
+
+  </script>
+
+  
+
+  <script>
+
+/*    // create a map in the "map" div, set the view to a given place and zoom
+
+var map = L.map('map').setView([51.505, -0.09], 13);
+
+
+
+// add an OpenStreetMap tile layer
+
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+
+}).addTo(map);
+
+
+
+// add a marker in the given location, attach some popup content to it and open the popup
+
+L.marker([51.5, -0.09]).addTo(map)
+
+    .bindPopup('A pretty CSS3 popup. <br> Easily customizable.')
+
+    .openPopup();
+
+*/
+
+  </script>
+
+    
+
+</body>
+
+</html>
