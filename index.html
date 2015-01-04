@@ -74,16 +74,42 @@
 
   <script type="text/javascript" >
 
-     var map = new L.Map('map', {center: new L.LatLng(-37.813186, 144.9629796), zoom: 9});
-
+     
       var googleLayer = new L.Google('ROADMAP');
+      
+      var grayscale = L.tileLayer(mapboxUrl, {id: 'MapID', attribution: mapboxAttribution}),
+      streets   = L.tileLayer(mapboxUrl, {id: 'MapID', attribution: mapboxAttribution});
 
-      map.addLayer(googleLayer);
+      var ballarat = L.marker([-37.913186, 144.9629796]).bindPopup('This is ballarat'),
+      melbourne = L.marker([-37.813186, 144.9629796]).bindPopup('This is melbs');
 
-      var imageUrl = 'http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg',
-      imageBounds = [[-37.823186, 144.9629796], [-37.813186, 144.8629796]];
+      var cities = L.layerGroup([ballarat, melbourne]);
 
-      L.imageOverlay(imageUrl, imageBounds).addTo(map);
+      var map = new L.Map('map', {
+        center: new L.LatLng(-37.813186, 144.9629796), 
+        zoom: 9,
+        layers: [googleLayer,grayscale, cities]
+      });
+
+      //map.addLayer(googleLayer);
+
+      var baseMaps = {
+          "Grayscale": grayscale,
+          "Streets": streets
+      };
+
+      var overlayMaps = {
+          "Cities": cities
+      };
+      
+      L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+      
+
+      //var imageUrl = 'http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg',
+      //imageBounds = [[-37.823186, 144.9629796], [-37.813186, 144.8629796]];
+
+      //L.imageOverlay(imageUrl, imageBounds).addTo(map);
 
 //test to see whether this works
 
@@ -97,8 +123,7 @@
 
     var arrowwebservice = "http://54.66.167.87/?jsoncallback=table";
 
-	  var cities = L.layerGroup([littleton, denver, aurora, golden]);
-
+	  
 	
 
     $( "button" ).click(function() {
