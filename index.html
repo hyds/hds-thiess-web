@@ -94,13 +94,15 @@
           "Cities": cities
       };
       
-      L.control.layers(baseMaps, overlayMaps).addTo(map);
-
+      
       var map = new L.Map('map', {
         center: new L.LatLng(-37.813186, 144.9629796), 
-        zoom: 9,
+        zoom: 9
         layers: [googleLayer,cities]
       });      
+
+      L.control.layers(baseMaps, overlayMaps).addTo(map);
+
 
       //map.addLayer(googleLayer);
       //map.addLayer(grayscale);
