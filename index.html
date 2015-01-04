@@ -77,25 +77,17 @@
      
       var googleLayer = new L.Google('ROADMAP');
       
-      var grayscale = L.tileLayer(mapboxUrl, {id: 'MapID', attribution: mapboxAttribution}),
-      streets   = L.tileLayer(mapboxUrl, {id: 'MapID', attribution: mapboxAttribution});
+      //var grayscale = L.tileLayer(googleLayer, {id: 'MapID', attribution: mapboxAttribution}),
+      //streets   = L.tileLayer(googleLayer, {id: 'MapID', attribution: mapboxAttribution});
 
       var ballarat = L.marker([-37.913186, 144.9629796]).bindPopup('This is ballarat'),
       melbourne = L.marker([-37.813186, 144.9629796]).bindPopup('This is melbs');
 
       var cities = L.layerGroup([ballarat, melbourne]);
 
-      var map = new L.Map('map', {
-        center: new L.LatLng(-37.813186, 144.9629796), 
-        zoom: 9,
-        layers: [googleLayer,grayscale, cities]
-      });
-
-      //map.addLayer(googleLayer);
-
       var baseMaps = {
-          "Grayscale": grayscale,
-          "Streets": streets
+          "Google" : googleLayer
+          //"Streets": streets
       };
 
       var overlayMaps = {
@@ -104,7 +96,17 @@
       
       L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-      
+      var map = new L.Map('map', {
+        center: new L.LatLng(-37.813186, 144.9629796), 
+        zoom: 9,
+        layers: [googleLayer,cities]
+      });      
+
+      //map.addLayer(googleLayer);
+      //map.addLayer(grayscale);
+      //map.addLayer(cities);
+
+
 
       //var imageUrl = 'http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg',
       //imageBounds = [[-37.823186, 144.9629796], [-37.813186, 144.8629796]];
